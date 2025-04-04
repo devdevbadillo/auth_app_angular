@@ -1,0 +1,65 @@
+<auth-title title="Sing Up"></auth-title>
+<form
+  class="flex flex-col gap-6 my-6"
+  [formGroup]="signUpForm"
+  (ngSubmit)="onSubmit()"
+>
+  <shared-form-field
+    fieldName="name"
+    label="Your name"
+    type="text"
+    placeholder="e.g. 'John'"
+    module="auth"
+    [formGroup]="signUpForm"
+  ></shared-form-field>
+
+  <shared-form-field
+    fieldName="lastname"
+    label="Your lastname"
+    type="text"
+    placeholder="e.g. 'Doe'"
+    module="auth"
+    [formGroup]="signUpForm"
+  ></shared-form-field>
+
+  <shared-form-field
+    fieldName="email"
+    label="Email address"
+    type="text"
+    placeholder="e.g. alex@email.com"
+    module="auth"
+    [formGroup]="signUpForm"
+  ></shared-form-field>
+
+  <shared-form-field
+    fieldName="password"
+    label="Password"
+    type="password"
+    placeholder="At least 8 characters"
+    module="auth"
+    [formGroup]="signUpForm"
+  ></shared-form-field>
+
+  <shared-button text="Register"></shared-button>
+
+  <div class="flex flex-col gap-2 py-4 border-y-2">
+    <p class="text-center text-sm">Or sign in with: </p>
+    <auth-social-media
+      urlPhoto="https://www.svgrepo.com/show/475656/google-color.svg"
+      text="Google"
+      alt="Logo Google"
+    ></auth-social-media>
+
+    <auth-social-media
+      urlPhoto="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/github.svg"
+      text="Github"
+      alt="Logo Github"
+    ></auth-social-media>
+  </div>
+</form>
+
+<auth-navigatation
+  [text]="'Already have an account? '"
+  [url]="'/auth'"
+  [destination]="'Sign in'"
+></auth-navigatation>
