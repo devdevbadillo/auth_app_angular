@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 
 import { Error404PageComponent } from './pages/error404-page/error404-page.component';
 
-import { SharedButtonComponent, FormFieldComponent } from './components';
+import { SharedButtonComponent, FormFieldComponent, LoaderComponent } from './components';
 
 @NgModule({
   imports: [
@@ -20,6 +20,7 @@ import { SharedButtonComponent, FormFieldComponent } from './components';
     // Components
     SharedButtonComponent,
     FormFieldComponent,
+    LoaderComponent,
   ],
   exports: [
     // Pages
@@ -28,6 +29,7 @@ import { SharedButtonComponent, FormFieldComponent } from './components';
     // Components
     SharedButtonComponent,
     FormFieldComponent,
+    LoaderComponent
   ],
 })
 export class SharedModule { }

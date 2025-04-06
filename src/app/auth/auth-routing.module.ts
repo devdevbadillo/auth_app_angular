@@ -2,29 +2,40 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { AuthLayoutComponent } from '../layouts/auth-layout/auth-layout.component';
-import { SignInPageComponent, SignUpPageComponent } from './pages/';
+import {AuthSocialMediaPageComponent, SignInPageComponent, SignUpPageComponent} from './pages/';
 import {AuthRoutes} from "./api/auth-routes";
 
 const routes: Routes = [
   {
-    path: '',
+    path: AuthRoutes.signIn,
     component: AuthLayoutComponent,
     children: [
       {
-        path: AuthRoutes.signIn,
+        path: '',
         component: SignInPageComponent
-      },
-      {
-        path: AuthRoutes.signUp,
-        component: SignUpPageComponent
-      },
-      {
-        path: '**',
-        redirectTo: AuthRoutes.signIn
       }
     ]
+  },
+  {
+    path: AuthRoutes.signUp,
+    component: AuthLayoutComponent,
+    children: [
+      {
+        path: '',
+        component: SignUpPageComponent
+      }
+    ]
+  },
+  {
+    path: 'social-media',
+    component: AuthSocialMediaPageComponent
+  },
+  {
+    path: '**',
+    redirectTo: AuthRoutes.signIn
   }
 ]
+
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],

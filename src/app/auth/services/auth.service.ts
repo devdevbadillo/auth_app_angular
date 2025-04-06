@@ -5,26 +5,31 @@ import { environments } from '../../../config/env';
 import { AuthRoutes } from "../api/auth-routes";
 import {SignUpRequest, SignInRequest} from "../api/request";
 import {SignInResponse, MessageResponse} from "../api/response";
+import { Router } from '@angular/router';
+import {UserRoutes} from "../../user/api/UserRoutes";
+
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 
-  private publicApi = environments.publicApiUrl;
-  private secureApi = environments.secureApiUrl;
+  private publicApi: string = environments.publicApiUrl;
+  private secureApi: string= environments.secureApiUrl;
 
   constructor(
     private http: HttpClient,
+    private router: Router
   ) { }
 
-  private setAuthentication(token: string): boolean {
-    localStorage.setItem('token', token);
+  private setAuthentication(token: string, refreshToken: string): boolean {
+    localStorage.setItem('accessToken', token);
+    localStorage.setItem('refreshToken', refreshToken);
     return true;
   }
 
   signUp(signUpRequest: SignUpRequest): Observable<boolean> {
     return this.http.post<MessageResponse>(`${this.publicApi}/${AuthRoutes.signUp}`, signUpRequest)
       .pipe(
-        map(({ message }) => !!message),
+        map(({ message }: MessageResponse): boolean => !!message),
         catchError(err => throwError(() => err.error.message))
       )
   }
@@ -32,28 +37,52 @@ export class AuthService {
   signIn(signInRequest: SignInRequest): Observable<boolean> {
     return this.http.post<SignInResponse>(`${this.publicApi}/${AuthRoutes.signIn}`, signInRequest)
       .pipe(
-        map(({ accessToken, refreshToken }) => this.setAuthentication(accessToken)),
+        map(({ accessToken, refreshToken }: SignInResponse): boolean => this.setAuthentication(accessToken, refreshToken)),
         catchError(err => {
-          console.log(err)
           return throwError(() => err.error.message)
         })
       )
   }
 
   auth(): Observable<boolean> {
-    if (typeof window === 'undefined' || !window.localStorage) {
-      return of(false);
-    }
+    const accessToken: string | null = localStorage.getItem('accessToken');
 
-    const token: string | null = localStorage.getItem('token');
-    if (!token) return of(false);
+    if (!accessToken) return of(false);
 
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-
-    return this.http.get<MessageResponse>(`${this.secureApi}/user`, { headers }).pipe(
-      map(({ message }) => !!message),
-      catchError(() => of(false))
+    return this.validateToken(accessToken).pipe(
+      catchError(error => this.handleTokenError(error))
     );
   }
 
+  private validateToken(token: string): Observable<boolean> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http.get<MessageResponse>(`${this.secureApi}/${UserRoutes.home}`, { headers }).pipe(
+      map(({ message }: MessageResponse) => !!message)
+    );
+  }
+
+  private handleTokenError(error: any): Observable<boolean> {
+    if (error.error?.error === 'Token expired') return this.refreshAccessToken();
+
+    return of(false);
+  }
+
+  private refreshAccessToken(): Observable<boolean> {
+    const refreshToken: string | null = localStorage.getItem('refreshToken');
+
+    if (!refreshToken) return of(false);
+
+    const refreshHeaders = new HttpHeaders().set('refreshToken', refreshToken);
+
+    return this.http.post<SignInResponse>(`${this.publicApi}/${AuthRoutes.refreshToken}`, {}, { headers: refreshHeaders }
+    ).pipe(
+      map((response: SignInResponse) => {
+        localStorage.setItem('accessToken', response.accessToken);
+        this.router.navigate(['./app']);
+        return true;
+      }),
+      catchError(() => of(false))
+    );
+  }
 }

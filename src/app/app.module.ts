@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 
 import { SharedModule } from './shared/shared.module';
 import { UserLayoutComponent } from './layouts/user-layout/user-layout.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -18,9 +19,10 @@ import { UserLayoutComponent } from './layouts/user-layout/user-layout.component
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    SharedModule,
+    SharedModule
   ],
-  providers: [],
+  providers: [
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

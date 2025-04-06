@@ -6,9 +6,9 @@ import { AuthRoutingModule } from './auth-routing.module';
 import { SharedModule } from '../shared/shared.module';
 
 import { AuthLayoutComponent } from '../layouts/auth-layout/auth-layout.component';
-import { SignInPageComponent, SignUpPageComponent } from './pages/';
+import {AuthSocialMediaPageComponent, SignInPageComponent, SignUpPageComponent} from './pages/';
 
-import { NavigationAuthComponent, TitleComponent, AuthSocialMediaComponent } from './components';
+import { NavigationAuthComponent, TitleComponent, AuthSocialMediaSecctionComponent, AuthSocialMediaComponent } from './components';
 
 @NgModule({
   declarations: [
@@ -18,11 +18,13 @@ import { NavigationAuthComponent, TitleComponent, AuthSocialMediaComponent } fro
     //Pages
     SignInPageComponent,
     SignUpPageComponent,
+    AuthSocialMediaPageComponent,
 
     // Components
     NavigationAuthComponent,
     TitleComponent,
     AuthSocialMediaComponent,
+    AuthSocialMediaSecctionComponent,
   ],
   imports: [
     // Angular

@@ -21,6 +21,11 @@ const routes: Routes = [
     component: Error404PageComponent
   },
   {
+    path: "",
+    redirectTo: "auth",
+    pathMatch: "full"
+  },
+  {
     path: '**',
     redirectTo: '404'
   }

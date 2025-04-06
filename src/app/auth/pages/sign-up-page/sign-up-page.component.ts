@@ -20,7 +20,6 @@ export class SignUpPageComponent {
     email: ["", [Validators.required, Validators.pattern(this.authValidator.emailPattern)]],
     password: ["", [Validators.required, Validators.minLength(8)]],
     name: ["", [Validators.required, Validators.minLength(3)]],
-    lastname: ["", [Validators.required, Validators.minLength(3)]],
   }, {
     updateOn: 'submit',
   });
