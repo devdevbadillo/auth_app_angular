@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { toast } from 'ngx-sonner';
 
 @Injectable({ providedIn: 'root' })
 export class ValidatorsAuthService {
@@ -42,6 +43,12 @@ export class ValidatorsAuthService {
         break;
       case 'Password incorrect':
         form.controls['password'].setErrors({ 'passwordIncorrect': true });
+        break;
+      case 'The username and/or password you entered are incorrect, please try again':
+        toast.error('Authentication error', {
+          duration: 5000,
+          description: 'Error: ' + error
+        });
         break;
       default:
         break;

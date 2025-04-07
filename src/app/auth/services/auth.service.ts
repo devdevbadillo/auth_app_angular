@@ -44,6 +44,20 @@ export class AuthService {
       )
   }
 
+  oauth2Error(errorToken: string): Observable<boolean> {
+
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${errorToken}`);
+
+    return this.http.get<MessageResponse>(`${this.publicApi}/${AuthRoutes.oauth2error}`, { headers })
+      .pipe(
+        map(({ message }: MessageResponse): boolean => {
+          console.log(message);
+          return true;
+        }),
+        catchError(err => throwError(() => console.log(err)))
+      )
+  }
+
   auth(): Observable<boolean> {
     const accessToken: string | null = localStorage.getItem('accessToken');
 

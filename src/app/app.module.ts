@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 
 import { SharedModule } from './shared/shared.module';
 import { UserLayoutComponent } from './layouts/user-layout/user-layout.component';
+import { NgxSonnerToaster } from 'ngx-sonner';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,12 @@ import { UserLayoutComponent } from './layouts/user-layout/user-layout.component
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    SharedModule
+
+    // Common module
+    SharedModule,
+
+    // External
+    NgxSonnerToaster
   ],
   providers: [
   ],

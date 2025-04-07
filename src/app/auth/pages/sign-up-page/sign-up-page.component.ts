@@ -32,8 +32,9 @@ export class SignUpPageComponent {
 
     const email = this.signUpForm.controls['email'].value;
     const password = this.signUpForm.controls['password'].value;
+    const name = this.signUpForm.controls['name'].value;
 
-    this.authService.signUp({email, password})
+    this.authService.signUp({email, password, name})
       .subscribe({
         next: () => {
           this.signUpForm.reset();

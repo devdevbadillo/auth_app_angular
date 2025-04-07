@@ -9,6 +9,7 @@ import { AuthLayoutComponent } from '../layouts/auth-layout/auth-layout.componen
 import {AuthSocialMediaPageComponent, SignInPageComponent, SignUpPageComponent} from './pages/';
 
 import { NavigationAuthComponent, TitleComponent, AuthSocialMediaSecctionComponent, AuthSocialMediaComponent } from './components';
+import { NgxSonnerToaster } from 'ngx-sonner';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { NavigationAuthComponent, TitleComponent, AuthSocialMediaSecctionCompone
     // Angular
     CommonModule,
     ReactiveFormsModule,
+
 
     // Routing
     AuthRoutingModule,
