@@ -53,17 +53,14 @@ export class AuthSocialMediaPageComponent implements OnInit {
   }
 
   private handleFailureOauthAuthentication(error: string, errorToken: string) {
-    this.authService.oauth2Error(errorToken).subscribe(res => {
-      if (!res) {
-        this.navigateToSignIn();
-        return;
-      }
-
-      toast.error('Authentication error', {
-        duration: 5000,
-        description: 'Error: ' + error
-      });
+    this.authService.oauth2Error(errorToken).subscribe({
+      next: () => {
+        toast.error('Authentication error', {
+          duration: 5000,
+          description: 'Error: ' + error
+        });
+      },
+      error: () => this.navigateToSignIn()
     })
   }
-
 }

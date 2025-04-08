@@ -6,10 +6,15 @@ import { AuthRoutingModule } from './auth-routing.module';
 import { SharedModule } from '../shared/shared.module';
 
 import { AuthLayoutComponent } from '../layouts/auth-layout/auth-layout.component';
-import {AuthSocialMediaPageComponent, SignInPageComponent, SignUpPageComponent} from './pages/';
+import {
+  AuthSocialMediaPageComponent,
+  SignInPageComponent,
+  SignUpPageComponent,
+  RecoveryAccountPageComponent,
+  ChangePasswordPageComponent
+} from './pages/';
 
 import { NavigationAuthComponent, TitleComponent, AuthSocialMediaSecctionComponent, AuthSocialMediaComponent } from './components';
-import { NgxSonnerToaster } from 'ngx-sonner';
 
 @NgModule({
   declarations: [
@@ -20,6 +25,8 @@ import { NgxSonnerToaster } from 'ngx-sonner';
     SignInPageComponent,
     SignUpPageComponent,
     AuthSocialMediaPageComponent,
+    RecoveryAccountPageComponent,
+    ChangePasswordPageComponent,
 
     // Components
     NavigationAuthComponent,
@@ -31,7 +38,6 @@ import { NgxSonnerToaster } from 'ngx-sonner';
     // Angular
     CommonModule,
     ReactiveFormsModule,
-
 
     // Routing
     AuthRoutingModule,

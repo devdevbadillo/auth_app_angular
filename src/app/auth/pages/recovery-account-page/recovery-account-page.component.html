@@ -1,0 +1,24 @@
+<auth-title title="Recovery account"></auth-title>
+<form
+  class="flex flex-col gap-6 my-6"
+  (ngSubmit)="onSubmit()"
+  [formGroup]="recoveryAccountForm"
+>
+  <shared-form-field
+    fieldName="email"
+    label="Email address"
+    type="text"
+    placeholder="e.g. alex@email.com"
+    module="auth"
+    [formGroup]="recoveryAccountForm"
+  ></shared-form-field>
+
+  <auth-navigatation
+    text="Remember your password? "
+    url="/auth/sign-in"
+    destination="Sign in"
+    textAlign="text-end"
+  ></auth-navigatation>
+
+  <shared-button text="Send e-mail"></shared-button>
+</form>

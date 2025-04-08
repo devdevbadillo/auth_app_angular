@@ -21,6 +21,8 @@ export class ValidatorsAuthService {
           return "Email not valid";
         case 'minlength':
           return `Must be  least ${errors['minlength'].requiredLength} characters.`;
+        case 'notEqual':
+          return 'Passwords do not match';
         case 'emailTaken':
           return 'User already exists';
         case 'passwordIncorrect':

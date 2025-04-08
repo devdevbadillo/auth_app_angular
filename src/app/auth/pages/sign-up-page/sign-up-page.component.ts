@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ValidatorsService } from '../../../shared/service/validators.service';
 import { AuthService } from '../../services/auth.service';
 import { ValidatorsAuthService } from '../../services/validatorsAuth.service';
+import { toast } from 'ngx-sonner';
 
 @Component({
   selector: 'auth-sign-up-page',
@@ -38,6 +39,7 @@ export class SignUpPageComponent {
       .subscribe({
         next: () => {
           this.signUpForm.reset();
+          toast.success('Operation success', { description: 'Message: User registered successfully'});
         },
         error: (error) => this.authValidator.handleFormError(this.signUpForm, error)
       })

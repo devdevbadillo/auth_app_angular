@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, map, catchError, throwError, of } from 'rxjs';
 import { environments } from '../../../config/env';
 import { AuthRoutes } from "../api/auth-routes";
-import {SignUpRequest, SignInRequest} from "../api/request";
+import {SignUpRequest, SignInRequest, RecoveryAccountRequest} from "../api/request";
 import {SignInResponse, MessageResponse} from "../api/response";
 import { Router } from '@angular/router';
 import {UserRoutes} from "../../user/api/UserRoutes";
@@ -44,17 +44,33 @@ export class AuthService {
       )
   }
 
-  oauth2Error(errorToken: string): Observable<boolean> {
+  recoveryAccount(request: RecoveryAccountRequest): Observable<string> {
+    return this.http.post<MessageResponse>(`${this.publicApi}/${AuthRoutes.recoveryAccount}`, request)
+      .pipe(
+        map(({ message }: MessageResponse): string => message),
+        catchError(err => throwError(() => err.error.message))
+    )
+  }
 
+  isAuthorizedViewChangePassword(token: string): Observable<boolean> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http.get<MessageResponse>(`${this.publicApi}/${AuthRoutes.changePassword}`, { headers })
+      .pipe(
+        map(({ message }: MessageResponse): boolean => !!message),
+        catchError(err => throwError(() => err.error.message))
+    )
+  }
+
+  oauth2Error(errorToken: string): Observable<boolean> {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${errorToken}`);
 
     return this.http.get<MessageResponse>(`${this.publicApi}/${AuthRoutes.oauth2error}`, { headers })
       .pipe(
         map(({ message }: MessageResponse): boolean => {
-          console.log(message);
           return true;
         }),
-        catchError(err => throwError(() => console.log(err)))
+        catchError(err => throwError(() => err.error.message))
       )
   }
 

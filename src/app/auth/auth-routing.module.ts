@@ -2,7 +2,13 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { AuthLayoutComponent } from '../layouts/auth-layout/auth-layout.component';
-import {AuthSocialMediaPageComponent, SignInPageComponent, SignUpPageComponent} from './pages/';
+import {
+  AuthSocialMediaPageComponent,
+  RecoveryAccountPageComponent,
+  ChangePasswordPageComponent,
+  SignInPageComponent,
+  SignUpPageComponent
+} from './pages/';
 import {AuthRoutes} from "./api/auth-routes";
 
 const routes: Routes = [
@@ -23,6 +29,26 @@ const routes: Routes = [
       {
         path: '',
         component: SignUpPageComponent
+      }
+    ]
+  },
+  {
+    path: AuthRoutes.recoveryAccount,
+    component: AuthLayoutComponent,
+    children: [
+      {
+        path: '',
+        component: RecoveryAccountPageComponent
+      }
+    ]
+  },
+  {
+    path: AuthRoutes.changePassword,
+    component: AuthLayoutComponent,
+    children: [
+      {
+        path: '',
+        component: ChangePasswordPageComponent
       }
     ]
   },
