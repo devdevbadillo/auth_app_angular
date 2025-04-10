@@ -14,9 +14,7 @@ const isAuthtenticated = (): Observable<boolean> => {
   return authService.auth()
     .pipe(
       tap(isAuthenticated => {
-        if (!isAuthenticated) {
-          router.navigate(['./auth']);
-        }
+        if (!isAuthenticated) router.navigate(['./auth']);
       }),
       finalize(() => {
         setTimeout(() => {

@@ -3,12 +3,14 @@ import { CommonModule } from '@angular/common';
 import { UserPageComponent } from './pages';
 import {UserRoutingModule} from "./user-routing.module";
 import {SharedModule} from "../shared/shared.module";
+import { NavbarUserComponent } from './components/navbar-user/navbar-user.component';
 
 @NgModule({
   declarations: [
 
     // Pages
-    UserPageComponent
+    UserPageComponent,
+      NavbarUserComponent
   ],
   imports: [
     // Angular

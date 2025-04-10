@@ -52,6 +52,12 @@ export class ValidatorsAuthService {
           description: 'Error: ' + error
         });
         break;
+      case 'You already have instructions to change password, check your email':
+        toast.error('Sending email error', {
+          duration: 5000,
+          description: 'Error: ' + error
+        })
+        break;
       default:
         break;
     }

@@ -1,1 +1,15 @@
-<router-outlet></router-outlet>
+<div class="w-[90%] xl:w-[80%] flex justify-center mx-auto ">
+  <nav class="w-full p-4">
+    <ul class="flex justify-between items-center">
+      <div>
+        <p>Welcome</p>
+      </div>
+      <button type="button" (click)="onClickSignOut()">
+        Sign out
+      </button>
+    </ul>
+  </nav>
+  <router-outlet>
+
+  </router-outlet>
+<div>

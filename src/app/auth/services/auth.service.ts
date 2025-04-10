@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, map, catchError, throwError, of } from 'rxjs';
 import { environments } from '../../../config/env';
 import { AuthRoutes } from "../api/auth-routes";
-import {SignUpRequest, SignInRequest, RecoveryAccountRequest} from "../api/request";
+import {SignUpRequest, SignInRequest, RecoveryAccountRequest, ChangePasswordRequest} from "../api/request";
 import {SignInResponse, MessageResponse} from "../api/response";
 import { Router } from '@angular/router';
 import {UserRoutes} from "../../user/api/UserRoutes";
@@ -58,8 +58,21 @@ export class AuthService {
     return this.http.get<MessageResponse>(`${this.publicApi}/${AuthRoutes.changePassword}`, { headers })
       .pipe(
         map(({ message }: MessageResponse): boolean => !!message),
-        catchError(err => throwError(() => err.error.message))
+        catchError(() => of(false))
     )
+  }
+
+  changePassword(token: string, changePasswordRequest: ChangePasswordRequest): Observable<boolean> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http.patch<MessageResponse>(
+      `${this.publicApi}/${AuthRoutes.changePassword}`,
+      changePasswordRequest,
+      { headers }
+    ).pipe(
+      map(({ message }: MessageResponse): boolean => !!message),
+      catchError(err => throwError(() => err.error.message || 'Error al cambiar la contraseña'))
+    );
   }
 
   oauth2Error(errorToken: string): Observable<boolean> {

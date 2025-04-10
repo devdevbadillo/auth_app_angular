@@ -10,6 +10,7 @@ import {
   SignUpPageComponent
 } from './pages/';
 import {AuthRoutes} from "./api/auth-routes";
+import {changePasswordGuard} from "./guards/change-password.guard";
 
 const routes: Routes = [
   {
@@ -48,7 +49,8 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: ChangePasswordPageComponent
+        component: ChangePasswordPageComponent,
+        canActivate: [changePasswordGuard]
       }
     ]
   },

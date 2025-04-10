@@ -1,3 +1,4 @@
 export const UserRoutes = {
-  home: "user"
+  home: "user",
+  signOut: "sign-out"
 }
