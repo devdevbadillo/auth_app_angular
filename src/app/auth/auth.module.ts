@@ -11,7 +11,8 @@ import {
   SignInPageComponent,
   SignUpPageComponent,
   RecoveryAccountPageComponent,
-  ChangePasswordPageComponent
+  ChangePasswordPageComponent,
+  RefreshAccessToVerifyPageComponent
 } from './pages/';
 
 import { NavigationAuthComponent, TitleComponent, AuthSocialMediaSecctionComponent, AuthSocialMediaComponent } from './components';
@@ -27,6 +28,7 @@ import { NavigationAuthComponent, TitleComponent, AuthSocialMediaSecctionCompone
     AuthSocialMediaPageComponent,
     RecoveryAccountPageComponent,
     ChangePasswordPageComponent,
+    RefreshAccessToVerifyPageComponent,
 
     // Components
     NavigationAuthComponent,

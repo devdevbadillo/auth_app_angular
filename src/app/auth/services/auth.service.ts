@@ -1,12 +1,13 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, map, catchError, throwError, of } from 'rxjs';
+import { Observable, map, catchError, throwError, of, finalize } from 'rxjs';
 import { environments } from '../../../config/env';
 import { AuthRoutes } from "../api/auth-routes";
 import {SignUpRequest, SignInRequest, RecoveryAccountRequest, ChangePasswordRequest} from "../api/request";
 import {SignInResponse, MessageResponse} from "../api/response";
 import { Router } from '@angular/router';
 import {UserRoutes} from "../../user/api/UserRoutes";
+import {LoaderService} from "../../shared/service/loader.service";
 
 
 @Injectable({ providedIn: 'root' })
@@ -17,7 +18,8 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private loaderService: LoaderService,
   ) { }
 
   private setAuthentication(token: string, refreshToken: string): boolean {
@@ -52,6 +54,34 @@ export class AuthService {
     )
   }
 
+  isAuthorizedToRefreshAccessToVerifyAccount(token: string): Observable<boolean> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http.get<MessageResponse>(`${this.publicApi}/${AuthRoutes.refreshAccessToVerifyAccount}`, { headers })
+      .pipe(
+        map(({ message }: MessageResponse): boolean => !!message),
+        catchError(() => of(false))
+      )
+  }
+
+  refreshAccessToVerifyAccount(token: string): Observable<boolean> {
+    this.loaderService.show()
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http.patch<MessageResponse>(`${this.publicApi}/${AuthRoutes.refreshAccessToVerifyAccount}`, {}, { headers })
+      .pipe(
+        map(({ message }: MessageResponse): boolean => {
+          return true;
+        }),
+        catchError(() => of(false)),
+        finalize(() => {
+          setTimeout(() => {
+            this.loaderService.hide()
+          }, 2000);
+        })
+      )
+  }
+
   isAuthorizedViewChangePassword(token: string): Observable<boolean> {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
@@ -72,6 +102,22 @@ export class AuthService {
     ).pipe(
       map(({ message }: MessageResponse): boolean => !!message),
       catchError(err => throwError(() => err.error.message || 'Error al cambiar la contraseña'))
+    );
+  }
+
+  verifyAccount(token: string): Observable<boolean> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http.patch<SignInResponse>(
+      `${this.publicApi}/${AuthRoutes.verifyAccount}`,
+      {},
+      { headers }
+    ).pipe(
+      map(({ accessToken, refreshToken }: SignInResponse): boolean => {
+        this.setAuthentication(accessToken, refreshToken);
+        return true;
+      }),
+      catchError(() => of(false))
     );
   }
 

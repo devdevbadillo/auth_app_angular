@@ -7,10 +7,14 @@ import {
   RecoveryAccountPageComponent,
   ChangePasswordPageComponent,
   SignInPageComponent,
-  SignUpPageComponent
+  SignUpPageComponent, RefreshAccessToVerifyPageComponent
 } from './pages/';
+
 import {AuthRoutes} from "./api/auth-routes";
 import {changePasswordGuard} from "./guards/change-password.guard";
+import {verifyAccountGuard} from "./guards/verify-account.guard";
+import {EmptyComponent} from "../shared/components/empty/empty.component";
+import {refreshAccessToVerifyAccountGuard} from "./guards/refresh-access-to-verify-account.guard";
 
 const routes: Routes = [
   {
@@ -55,8 +59,24 @@ const routes: Routes = [
     ]
   },
   {
+    path: AuthRoutes.refreshAccessToVerifyAccount,
+    component: AuthLayoutComponent,
+    children: [
+      {
+        path: '',
+        component: RefreshAccessToVerifyPageComponent,
+        canActivate: [refreshAccessToVerifyAccountGuard]
+      }
+    ]
+  },
+  {
     path: 'social-media',
     component: AuthSocialMediaPageComponent
+  },
+  {
+    path: 'verify-account',
+    component: EmptyComponent,
+    canActivate: [verifyAccountGuard],
   },
   {
     path: '**',
