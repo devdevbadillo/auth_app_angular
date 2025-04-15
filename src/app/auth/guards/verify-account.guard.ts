@@ -1,12 +1,12 @@
 import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivateFn, RouterStateSnapshot, Router } from '@angular/router';
 import { finalize, Observable, tap, of, map } from 'rxjs';
-import { AuthService } from '../services/auth.service';
 import { LoaderService } from "../../shared/service/loader.service";
+import {CredentialService} from "../services/credential.service";
 
 const isAuthorized = (route: ActivatedRouteSnapshot): Observable<boolean> => {
   const loaderService: LoaderService = inject(LoaderService);
-  const authService: AuthService = inject(AuthService);
+  const credentialService: CredentialService = inject(CredentialService);
   const router: Router = inject(Router);
   const token: string | null = route.queryParamMap.get('accessToken');
 
@@ -17,7 +17,7 @@ const isAuthorized = (route: ActivatedRouteSnapshot): Observable<boolean> => {
 
   loaderService.show();
 
-  return authService.verifyAccount(token)
+  return credentialService.verifyAccount(token)
     .pipe(
       tap(isAuthorized => {
         if (isAuthorized) router.navigate(['./app']);
@@ -27,9 +27,7 @@ const isAuthorized = (route: ActivatedRouteSnapshot): Observable<boolean> => {
         return !isAuthorized;
       }),
       finalize(() => {
-        setTimeout(() => {
-          loaderService.hide();
-        }, 500);
+        loaderService.hide();
       })
     );
 }

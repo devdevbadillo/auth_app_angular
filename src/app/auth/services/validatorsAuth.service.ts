@@ -29,6 +29,8 @@ export class ValidatorsAuthService {
           return 'Please check again'
         case 'userNotExist':
           return 'User not registered';
+        case 'userNotVerified':
+          return 'User not verified';
       }
     }
 
@@ -45,6 +47,9 @@ export class ValidatorsAuthService {
         break;
       case 'Password incorrect':
         form.controls['password'].setErrors({ 'passwordIncorrect': true });
+        break;
+      case 'The user has not been verified':
+        form.controls['email'].setErrors({ 'userNotVerified': true });
         break;
       case 'The username and/or password you entered are incorrect, please try again':
         toast.error('Authentication error', {

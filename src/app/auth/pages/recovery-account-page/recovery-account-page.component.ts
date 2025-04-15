@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import {AuthService} from "../../services/auth.service";
 import {ValidatorsAuthService} from "../../services/validatorsAuth.service";
 import {toast} from "ngx-sonner";
 import {LoaderService} from "../../../shared/service/loader.service";
+import {CredentialService} from "../../services/credential.service";
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-recovery-account-page',
@@ -13,8 +14,9 @@ export class RecoveryAccountPageComponent {
 
   constructor(
     private readonly  fb: FormBuilder,
-    private  readonly authService: AuthService,
+    private readonly credentialService: CredentialService,
     private readonly authValidator: ValidatorsAuthService,
+    private readonly loaderService: LoaderService
   ) {
   }
 
@@ -32,12 +34,18 @@ export class RecoveryAccountPageComponent {
 
     const email = this.recoveryAccountForm.controls['email'].value;
 
-    this.authService.recoveryAccount({email}).subscribe({
-      next: (message: string ) => {
+    this.loaderService.startSending();
+
+    this.credentialService.recoveryAccount({email}).pipe(
+      finalize(() => this.loaderService.stopSending())
+    ).subscribe({
+      next: (message: string) => {
         this.recoveryAccountForm.reset();
         toast.success('Operation success', { description: message});
       },
-      error: (error) => this.authValidator.handleFormError(this.recoveryAccountForm, error),
+      error: (error) => {
+        this.authValidator.handleFormError(this.recoveryAccountForm, error);
+      }
     });
   }
 }

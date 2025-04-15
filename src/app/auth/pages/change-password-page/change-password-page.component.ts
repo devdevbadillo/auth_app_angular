@@ -4,6 +4,9 @@ import {ValidatorsService} from "../../../shared/service/validators.service";
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from "../../services/auth.service";
 import {toast} from "ngx-sonner";
+import {CredentialService} from "../../services/credential.service";
+import {LoaderService} from "../../../shared/service/loader.service";
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-change-password-page',
@@ -15,8 +18,9 @@ export class ChangePasswordPageComponent {
     private readonly fb: FormBuilder,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly authService: AuthService,
+    private readonly credentialService: CredentialService,
     private readonly validatorsService: ValidatorsService,
+    private readonly loaderService: LoaderService
   ) {
   }
 
@@ -38,9 +42,12 @@ export class ChangePasswordPageComponent {
     const password = this.changePasswordForm.controls['password'].value;
     const repeatPassword = this.changePasswordForm.controls['repeatPassword'].value;
 
-    this.authService.changePassword(token!, {password, repeatPassword}).subscribe({
+    this.loaderService.startSending();
+    this.credentialService.changePassword(token!, {password, repeatPassword}).pipe(
+      finalize(() => this.loaderService.stopSending())
+    ).subscribe({
       next: () => {
-        this.navigateToSignIn();
+        this.router.navigateByUrl('/auth/sign-in');
       },
       error: () => {
         toast.error('Invalid token',
@@ -51,9 +58,5 @@ export class ChangePasswordPageComponent {
       }
     });
 
-  }
-
-  private navigateToSignIn() {
-    this.router.navigateByUrl('/auth/sign-in');
   }
 }

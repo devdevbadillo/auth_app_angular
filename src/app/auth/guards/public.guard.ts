@@ -9,6 +9,7 @@ const isAuthenticate = (): Observable<boolean> => {
   const authService: AuthService = inject(AuthService);
   const router: Router = inject(Router);
 
+
   loaderService.show();
   return authService.auth()
     .pipe(
@@ -17,9 +18,7 @@ const isAuthenticate = (): Observable<boolean> => {
       }),
       map(isAuth => !isAuth),
       finalize(() => {
-        setTimeout(() => {
-          loaderService.hide();
-        }, 300);
+        loaderService.hide();
       }),
     )
 };

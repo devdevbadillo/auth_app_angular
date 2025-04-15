@@ -5,8 +5,11 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class LoaderService {
-  private isLoading = new BehaviorSubject<boolean>(false);
+  public readonly isLoading = new BehaviorSubject<boolean>(false);
   public isLoading$ = this.isLoading.asObservable();
+
+  public readonly isSending = new BehaviorSubject<boolean>(false);
+  public isSending$ = this.isSending.asObservable();
 
   show() {
     this.isLoading.next(true);
@@ -14,5 +17,13 @@ export class LoaderService {
 
   hide() {
     this.isLoading.next(false);
+  }
+
+  startSending() {
+    this.isSending.next(true);
+  }
+
+  stopSending() {
+    this.isSending.next(false);
   }
 }

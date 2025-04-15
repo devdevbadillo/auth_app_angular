@@ -4,6 +4,9 @@ import { ValidatorsService } from '../../../shared/service/validators.service';
 import { AuthService } from '../../services/auth.service';
 import { ValidatorsAuthService } from '../../services/validatorsAuth.service';
 import { toast } from 'ngx-sonner';
+import {LoaderService} from "../../../shared/service/loader.service";
+import {CredentialService} from "../../services/credential.service";
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'auth-sign-up-page',
@@ -13,8 +16,9 @@ export class SignUpPageComponent {
 
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService,
-    private authValidator: ValidatorsAuthService
+    private credentialService: CredentialService,
+    private authValidator: ValidatorsAuthService,
+    private loaderService: LoaderService
   ) { }
 
   public signUpForm: FormGroup = this.fb.group({
@@ -35,13 +39,17 @@ export class SignUpPageComponent {
     const password = this.signUpForm.controls['password'].value;
     const name = this.signUpForm.controls['name'].value;
 
-    this.authService.signUp({email, password, name})
-      .subscribe({
+    this.loaderService.startSending()
+    this.credentialService.signUp({email, password, name}).pipe(
+      finalize(() => this.loaderService.stopSending())
+    ).subscribe({
         next: () => {
           this.signUpForm.reset();
           toast.success('Operation success', { description: 'Message: User registered successfully'});
         },
-        error: (error) => this.authValidator.handleFormError(this.signUpForm, error)
+        error: (error) => {
+          this.authValidator.handleFormError(this.signUpForm, error)
+        },
       })
   }
 

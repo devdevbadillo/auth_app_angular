@@ -4,7 +4,7 @@ import {finalize, map, Observable, tap, } from 'rxjs';
 import {AuthService} from "../../auth/services/auth.service";
 import {LoaderService} from "../../shared/service/loader.service";
 
-const isAuthtenticated = (): Observable<boolean> => {
+const isAuthenticate = (): Observable<boolean> => {
   const authService = inject(AuthService);
   const loaderService = inject(LoaderService);
   const router = inject(Router);
@@ -17,13 +17,11 @@ const isAuthtenticated = (): Observable<boolean> => {
         if (!isAuthenticated) router.navigate(['./auth']);
       }),
       finalize(() => {
-        setTimeout(() => {
-          loaderService.hide();
-        }, 300);
+        loaderService.hide();
       })
     )
 };
 
 export const activeSecure: CanActivateFn = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
-  return isAuthtenticated();
+  return isAuthenticate();
 };
